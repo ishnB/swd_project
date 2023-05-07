@@ -1,0 +1,13 @@
+.register {
+  width: 70%;
+}
+.login-title {
+  font-family: "Poppins";
+  font-size: 4em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #7630cb;
+}
+.login-btn {
+  cursor: pointer;
+}
