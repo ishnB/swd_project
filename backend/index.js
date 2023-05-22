@@ -37,7 +37,7 @@ app.post("/vendorlogin", async (req, res) => {
   const vendor = await VendorItems.findOne({ email: email });
   if (vendor) {
     if (password === vendor.password) {
-      res.send({ message: "Login Successfull", vendor: vendor });
+      res.send({ message: "Login Successfull", vendorUser: vendor });
     } else {
       res.send({ message: "Password didn't match" });
     }
@@ -51,7 +51,7 @@ app.post("/studentlogin", async (req, res) => {
   const student = await Student.findOne({ email: email });
   if (student) {
     if (password === student.password) {
-      res.send({ message: "Login Successfull", student: student });
+      res.send({ message: "Login Successfull", studentUser: student });
     } else {
       res.send({ message: "Password didn't match" });
     }

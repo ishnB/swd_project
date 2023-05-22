@@ -10,24 +10,29 @@ import Homepage from "./components/homepage/homepage";
 import "./App.css";
 
 function App() {
-  const [user, setLoginUser] = useState({});
+  const [vendorUser, setLoginVendor] = useState({});
+  const [studentUser, setLoginStudent] = useState({});
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Homepage />} />
-          <Route exact path="/student" element={<StudentHome />} />
-          <Route exact path="/vendor" element={<VendorHome />} />
+          <Route
+            exact
+            path="/student"
+            element={studentUser && <StudentHome />}
+          />
+          <Route exact path="/vendor" element={vendorUser && <VendorHome />} />
           <Route
             exact
             path="/vendorlogin"
-            element={<VendorLogin setLoginUser={setLoginUser} />}
+            element={<VendorLogin setLoginVendor={setLoginVendor} />}
           />
           <Route exact path="/vendorregister" element={<VendorRegister />} />
           <Route
             exact
             path="/studentlogin"
-            element={<StudentLogin setLoginUser={setLoginUser} />}
+            element={<StudentLogin setLoginStudent={setLoginStudent} />}
           />
           <Route exact path="/studentregister" element={<StudentRegister />} />
         </Routes>
