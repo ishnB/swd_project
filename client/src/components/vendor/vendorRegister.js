@@ -36,45 +36,7 @@ const VendorRegister = () => {
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <h1 className="login-title">Register</h1>
-      {/* <div className="login-form">
-        <label
-          for="name"
-          class="block text-sm font-medium leading-6 text-gray-900"
-        >
-          Name
-        </label>
-        <div className="mt-2">
-          <input
-            type="text"
-            name="name"
-            value={user.name}
-            placeholder="Name"
-            onChange={handleChange}
-            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          ></input>
-        </div>
-        <input
-          type="text"
-          name="email"
-          value={user.email}
-          placeholder="Email"
-          onChange={handleChange}
-        ></input>
-        <input
-          type="password"
-          name="password"
-          value={user.password}
-          placeholder="Password"
-          onChange={handleChange}
-        ></input>
-        <input
-          type="password"
-          name="cpassword"
-          value={user.cpassword}
-          placeholder="Re-enter Password"
-          onChange={handleChange}
-        ></input>
-      </div> */}
+
       <div class="flex-col space-y-4 mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <div>
           <label

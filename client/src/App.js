@@ -22,7 +22,7 @@ function App() {
             path="/student"
             element={studentUser && <StudentHome />}
           />
-          <Route exact path="/vendor" element={vendorUser && <VendorHome />} />
+          <Route exact path="/vendor" element={<VendorHome />} />
           <Route
             exact
             path="/vendorlogin"

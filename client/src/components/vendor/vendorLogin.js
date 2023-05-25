@@ -29,6 +29,12 @@ const VendorLogin = () => {
   return (
     //
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <form action="http://localhost:9000/auth/google">
+        <button type="submit" className="google-button">
+          Sign in with Google
+        </button>
+      </form>
+
       <h1 className="login-title">Login</h1>
       <div class="flex-col space-y-4 mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <div>
