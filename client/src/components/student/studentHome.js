@@ -63,9 +63,9 @@ function StudentHome({ setLoginUser }) {
       "Are you sure you want to place the order?"
     );
     if (shouldPlaceOrder) {
-      console.log("order:", transaction);
+      console.log("order:", [transaction, student]);
       axios
-        .post("http://localhost:9000/placeOrder", transaction)
+        .post("http://localhost:9000/placeOrder", [transaction, student])
         .then((res) => {
           alert(res.data.message);
         });

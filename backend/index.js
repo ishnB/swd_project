@@ -77,8 +77,11 @@ const studentSchema = new mongoose.Schema({
   email: String,
   password: String,
 });
-const transactionSchema = new mongoose.Schema({
+const transactionNewSchema = new mongoose.Schema({
   items: [],
+  studentId: String,
+  vendorId: String,
+  total: Number,
   status: Boolean,
 });
 const studentnewSchema = new mongoose.Schema({
@@ -86,7 +89,7 @@ const studentnewSchema = new mongoose.Schema({
   name: String,
   googleId: String,
   balance: Number,
-  transactions: [[{ items: String, price: Number }]],
+  transactions: [{ studentId: String }, [{ items: String, price: Number }]],
 });
 const vendoritemSchema = new mongoose.Schema({
   username: String,
@@ -122,7 +125,7 @@ const StudentItems = new mongoose.model("StudentItems", studentnewSchema);
 const VendorList = new mongoose.model("VendorList", vendornewSchema);
 const TransactionList = new mongoose.model(
   "TransactionList",
-  transactionSchema
+  transactionNewSchema
 );
 // passport.use(VendorNew.createStrategy());
 passport.use(VendorList.createStrategy());
@@ -138,6 +141,7 @@ passport.deserializeUser(function (serializedUser, done) {
   done(null, user);
 });
 passport.use(
+  "google-vendor",
   new GoogleStrategy(
     {
       clientID: GOOGLE_CLIENT_ID,
@@ -156,6 +160,7 @@ passport.use(
   )
 );
 passport.use(
+  "google-student",
   new GoogleStrategy(
     {
       clientID: GOOGLE_CLIENT_ID_S,
@@ -176,16 +181,16 @@ passport.use(
 
 app.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  passport.authenticate("google-vendor", { scope: ["email", "profile"] })
 );
 app.get(
   "/auth/google/student",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  passport.authenticate("google-student", { scope: ["email", "profile"] })
 );
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", {
+  passport.authenticate("google-vendor", {
     // successRedirect: "http://localhost:3000/vendor",
     failureRedirect: "/auth/google/failure",
   }),
@@ -197,7 +202,7 @@ app.get(
 );
 app.get(
   "/auth/google/student/callback",
-  passport.authenticate("google", {
+  passport.authenticate("google-student", {
     // successRedirect: "http://localhost:3000/vendor",
     failureRedirect: "/auth/google/failure",
   }),
@@ -336,14 +341,60 @@ app.post("/vendorItems", async (req, res) => {
   res.send(data);
 });
 app.post("/placeOrder", (req, res) => {
-  const trans = req.body;
+  const data = req.body;
+  const trans = data[0];
+  const student = data[1];
+  var totalPrice = 0;
+  trans.forEach((item) => {
+    totalPrice += parseInt(item[2]);
+  });
   const newTransaction = new TransactionList({
+    studentId: student._id,
+    vendorId: trans[0][0],
     items: [trans],
+    total: totalPrice,
     status: false,
   });
+  console.log(trans);
   newTransaction.save().then(() => {
     res.send({ message: "Successfully Placed" });
   });
+});
+app.post("/studentTransactions", async (req, res) => {
+  const student = req.body;
+  const data = await TransactionList.find({ studentId: student._id });
+  res.send(data);
+  console.log("transactions: ", data);
+});
+app.post("/vendorTransactions", async (req, res) => {
+  const vendor = req.body;
+  const data = await TransactionList.find({ vendorId: vendor._id });
+  res.send(data);
+  console.log("transactions: ", data);
+});
+app.post("/checkTransaction", async (req, res) => {
+  const data = req.body;
+  const result = data[0];
+  const transaction = data[1];
+  const student = data[2];
+  console.log("DATA :", result);
+  const trans = await TransactionList.findOne({ _id: result });
+  if (trans) {
+    if (student._id === trans.studentId) {
+      await TransactionList.findByIdAndUpdate(
+        trans._id,
+        { status: true },
+        { new: true }
+      );
+      await StudentItems.findByIdAndUpdate(
+        student._id,
+        {
+          $inc: { balance: -trans.total },
+        },
+        { new: true }
+      );
+    }
+  }
 });
 
 app.listen(9000, () => {
