@@ -142,9 +142,7 @@ function StudentTransactions() {
                       onChange={(e) => scanQr(e, transaction)}
                       className="mx-auto my-4 absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     ></input>
-                    <div className="bg-purple py-2 px-4 rounded-md shadow-sm mt-4 text-white font-bold inline-block">
-                      Upload QR
-                    </div>
+                    <QrCodeIcon className="h-8 w-8 mt-6 inline-block" />
                   </div>
                 </li>
               </ul>
