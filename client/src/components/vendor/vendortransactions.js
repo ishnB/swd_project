@@ -107,7 +107,7 @@ function VendorTransactions() {
               onClick={() => {
                 setShowPending(false);
               }}
-              className="h-6 w-6 text-purple-500 absolute top-0 right-0 cursor-pointer"
+              className="h-6 w-6 text-purple-500 absolute top-0 right-0 cursor-pointer hover:text-red-500 transition-colors"
             />
             {transactionListPending.map((transaction) => (
               <ul className="bg-white rounded-lg shadow-lg px-8 py-6 relative flex flex-col justify-center">
@@ -116,13 +116,13 @@ function VendorTransactions() {
                     onClick={() => {
                       showQR(transaction);
                     }}
-                    className="h-8 w-8 text-purple-500 absolute top-2 left-2 cursor-pointer"
+                    className="h-8 w-8 text-purple-500 absolute top-2 left-2 cursor-pointer hover:text-green-500 transition-colors"
                   />
                   <TrashIcon
                     onClick={() => {
                       removeTransaction(transaction);
                     }}
-                    className="h-8 w-8 text-purple-500 absolute top-2 right-2 cursor-pointer"
+                    className="h-8 w-8 text-purple-500 absolute top-2 right-2 cursor-pointer hover:text-red-500 transition-colors"
                   />
                   {transaction.items[0].map((trans) => (
                     <li className="border-2 m-2 p-2 rounded-md">
@@ -162,7 +162,7 @@ function VendorTransactions() {
               onClick={() => {
                 setQr(!isQr);
               }}
-              className="h-10 w-10 text-purple-500 absolute top-5 right-5 cursor-pointer"
+              className="h-10 w-10 text-purple-500 absolute top-5 right-5 cursor-pointer hover:text-red-500 transition-colors"
             />
           </div>
         )}
@@ -178,7 +178,7 @@ function VendorTransactions() {
               onClick={() => {
                 setShowCompleted(false);
               }}
-              className="h-6 w-6 text-purple-500 absolute top-0 right-0 cursor-pointer"
+              className="h-6 w-6 text-purple-500 absolute top-0 right-0 cursor-pointer hover:text-red-500 transition-colors"
             />
             {transactionListCompleted.map((transaction) => (
               <ul className=" bg-white rounded-lg shadow-lg px-8 py-6 flex flex-col justify-center">

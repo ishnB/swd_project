@@ -147,7 +147,7 @@ function StudentHome({ setLoginUser }) {
               {vendorList.map((vendor) => (
                 <li
                   key={vendor._id}
-                  className="border-2 border-yellow-500 p-4 flex flex-col gap-2 justify-center"
+                  className="border-2 border-yellow-500 p-4 flex flex-col gap-2 justify-center shadow-md"
                 >
                   <span className="text-xl">{vendor.name}</span>
                   <button
@@ -155,7 +155,7 @@ function StudentHome({ setLoginUser }) {
                       selectVendor(vendor);
                       setShowItems(true);
                     }}
-                    className="rounded-md w-fit mx-auto border-2 bg-purple p-2 text-white uppercase text-sm"
+                    className="rounded-md w-fit mx-auto border-2 bg-purple p-2 text-white uppercase text-sm hover:bg-white hover:text-purple hover:border-purple transition-colors"
                   >
                     Show Items
                   </button>
@@ -174,7 +174,7 @@ function StudentHome({ setLoginUser }) {
               <h1 className="text-2xl text-purple font-bold mb-6">ITEMS</h1>
               <ul className="grid grid-cols-2 m-2 gap-2">
                 {vendorItems.map((item) => (
-                  <li className="flex flex-col gap-2 border-2 border-purple justify-center p-4">
+                  <li className="flex flex-col gap-2 border-2 border-purple justify-center p-4 shadow-md">
                     <span className="uppercase text-xl font-bold">
                       {item.itemName}
                     </span>
@@ -185,7 +185,7 @@ function StudentHome({ setLoginUser }) {
                       onClick={() => {
                         addToCart(selVendor, item);
                       }}
-                      className="bg-purple p-2 border-white text-white w-fit mx-auto"
+                      className="bg-purple p-2 border-white text-white w-fit mx-auto border-2 rounded-md hover:bg-white hover:text-purple hover:border-purple transition-colors"
                     >
                       ADD TO CART
                     </button>

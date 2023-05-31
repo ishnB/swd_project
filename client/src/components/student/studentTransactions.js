@@ -116,7 +116,7 @@ function StudentTransactions() {
               onClick={() => {
                 setShowPending(false);
               }}
-              className="h-6 w-6 text-purple-500 absolute top-0 right-0 cursor-pointer"
+              className="h-6 w-6 text-purple-500 absolute top-0 right-0 cursor-pointer hover:text-red-500 transition-colors"
             />
             {transactionListPending.map((transaction) => (
               <ul className="bg-white rounded-lg shadow-lg px-8 py-6 relative flex flex-col justify-center">
@@ -158,10 +158,10 @@ function StudentTransactions() {
               onClick={() => {
                 setShowCompleted(false);
               }}
-              className="h-6 w-6 text-purple-500 absolute top-0 right-0 cursor-pointer"
+              className="h-6 w-6 text-purple-500 absolute top-0 right-0 cursor-pointer hover:text-red-500 transition-colors"
             />
             {transactionListCompleted.map((transaction) => (
-              <ul className=" bg-white rounded-lg shadow-lg px-8 py-6 flex flex-col justify-center">
+              <ul className="bg-white rounded-lg shadow-lg px-8 py-6 flex flex-col justify-center">
                 <li>
                   {transaction.items[0].map((trans) => (
                     <li className="border-2 m-2 p-2">

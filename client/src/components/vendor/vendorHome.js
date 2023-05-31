@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import "./vendorHome.css";
 
 function VendorHome({ setLoginUser }) {
   const [loggedIn, setLoggedin] = useState(false);
@@ -104,7 +103,7 @@ function VendorHome({ setLoginUser }) {
 
           <div className="bg-white relative flex flex-col justify-center px-6 py-10 lg:px-8 rounded shadow-lg max-w-sm mx-auto mb-12">
             <button
-              className="add-title text-purple cursor-pointer border-2 border-white hover:border-2 hover:border-purple transition-colors w-1/2 mx-auto rounded-md shadow-md"
+              className="add-title text-purple text-xl cursor-pointer border-2 border-white hover:border-2 hover:border-purple transition-colors w-1/2 mx-auto rounded-md shadow-md"
               onClick={() => {
                 setShowAdd(true);
               }}
@@ -118,7 +117,7 @@ function VendorHome({ setLoginUser }) {
                   onClick={() => {
                     setShowAdd(false);
                   }}
-                  className="h-6 w-6 text-purple-500 absolute top-5 right-5 cursor-pointer"
+                  className="h-6 w-6 text-purple-500 absolute top-5 right-5 cursor-pointer hover:text-red-500 transition-colors"
                 />
                 <div>
                   <label
@@ -159,7 +158,7 @@ function VendorHome({ setLoginUser }) {
                   </div>
                 </div>
                 <div
-                  className="login-btn flex w-full justify-center rounded-md bg-purple px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-white hover:text-purple hover:border-2 border-2 hover:border-purple focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="login-btn flex w-full justify-center rounded-md bg-purple px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-white hover:text-purple hover:border-2 border-2 hover:border-purple focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
                   onClick={register}
                 >
                   ADD
@@ -178,7 +177,7 @@ function VendorHome({ setLoginUser }) {
                       removeItem(item);
                     }}
                   >
-                    <TrashIcon className="h-6 w-6 text-purple-500 mx-auto mt-2 cursor-pointer" />
+                    <TrashIcon className="h-6 w-6 text-purple-500 mx-auto mt-2 cursor-pointer hover:text-red-500 transition-colors" />
                   </li>
                 </ul>
               </li>
