@@ -6,6 +6,9 @@ module.exports = {
       colors: {
         purple: "#7630cb",
       },
+      fontFamily: {
+        pop: ["Poppins", "sans-serif"],
+      },
     },
   },
   plugins: [

@@ -13,18 +13,12 @@ import QrScanner from "./components/student/qrscanner";
 import VendorTransactions from "./components/vendor/vendortransactions";
 
 function App() {
-  const [vendorUser, setLoginVendor] = useState({});
-  const [studentUser, setLoginStudent] = useState({});
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Homepage />} />
-          <Route
-            exact
-            path="/student"
-            element={studentUser && <StudentHome />}
-          />
+          <Route exact path="/student" element={<StudentHome />} />
           <Route exact path="/qrscanner" element={<QrScanner />} />
           <Route
             exact
@@ -37,17 +31,9 @@ function App() {
             element={<VendorTransactions />}
           />
           <Route exact path="/vendor" element={<VendorHome />} />
-          <Route
-            exact
-            path="/vendorlogin"
-            element={<VendorLogin setLoginVendor={setLoginVendor} />}
-          />
+          <Route exact path="/vendorlogin" element={<VendorLogin />} />
           <Route exact path="/vendorregister" element={<VendorRegister />} />
-          <Route
-            exact
-            path="/studentlogin"
-            element={<StudentLogin setLoginStudent={setLoginStudent} />}
-          />
+          <Route exact path="/studentlogin" element={<StudentLogin />} />
           <Route exact path="/studentregister" element={<StudentRegister />} />
         </Routes>
       </BrowserRouter>

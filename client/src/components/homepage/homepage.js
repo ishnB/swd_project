@@ -9,7 +9,7 @@ function Homepage() {
         onClick={() => {
           history("/vendorlogin");
         }}
-        class="bg-purple hover:bg-white hover:text-purple hover:border-2 hover:border-purple text-white font-bold py-2 px-4 rounded"
+        class="bg-purple border-2 hover:bg-white hover:text-purple hover:border-2 hover:border-purple text-white font-bold py-2 px-4 rounded"
       >
         VENDORS
       </button>
@@ -18,7 +18,7 @@ function Homepage() {
         onClick={() => {
           history("/studentlogin");
         }}
-        class="bg-purple hover:bg-white hover:text-purple hover:border-2 hover:border-purple text-white font-bold py-2 px-4 rounded"
+        class="bg-purple border-2 hover:bg-white hover:text-purple hover:border-2 hover:border-purple text-white font-bold py-2 px-4 rounded"
       >
         STUDENTS
       </button>

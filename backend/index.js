@@ -88,7 +88,7 @@ const studentnewSchema = new mongoose.Schema({
   username: String,
   name: String,
   googleId: String,
-  balance: Number,
+  balance: { type: Number, default: 10000 },
   transactions: [{ studentId: String }, [{ items: String, price: Number }]],
 });
 const vendoritemSchema = new mongoose.Schema({
@@ -170,7 +170,7 @@ passport.use(
     },
     function (accessToken, refreshToken, profile, cb) {
       StudentItems.findOrCreate(
-        { googleId: profile.id, name: profile.displayName, balance: 10000 },
+        { googleId: profile.id, name: profile.displayName },
         function (err, user) {
           return cb(err, user);
         }
@@ -240,59 +240,19 @@ app.get("/studentHome", async (req, res) => {
   }
 });
 
-app.get("/logout", (req, res) => {
-  req.logout();
-  req.session.destroy();
+app.post("/vendorlogout", (req, res) => {
+  res.clearCookie("name", { path: "/" });
   console.log("done");
   res.send("Goodbye!");
+  res.end();
+});
+app.post("/studentlogout", (req, res) => {
+  res.clearCookie("student", { path: "/" });
+  console.log("done");
+  res.send("Goodbye!");
+  res.end();
 });
 
-app.post("/vendorlogin", async (req, res) => {
-  const { email, password } = req.body;
-  const vendor = await Vendor.findOne({ email: email });
-  if (vendor) {
-    if (password === vendor.password) {
-      res.send({ message: "Login Successfull", user: vendor });
-    } else {
-      res.send({ message: "Password didn't match" });
-    }
-  } else {
-    res.send({ message: "User not registered" });
-  }
-});
-
-app.post("/studentlogin", async (req, res) => {
-  const { email, password } = req.body;
-  const student = await Student.findOne({ email: email });
-  if (student) {
-    if (password === student.password) {
-      res.send({ message: "Login Successfull", user: student });
-    } else {
-      res.send({ message: "Password didn't match" });
-    }
-  } else {
-    res.send({ message: "User not registered" });
-  }
-});
-
-app.post("/vendorregister", async (req, res) => {
-  const { name, email, password } = req.body;
-  const vendor = await VendorItems.findOne({ email: email });
-  console.log("vendor..", vendor);
-  //   Vendor.findOne({ email: email }).then((err, vendor) => {
-  if (vendor) {
-    res.send({ message: "User already registered" });
-  } else {
-    const vendor = new VendorItems({
-      name,
-      email,
-      password,
-    });
-    vendor.save().then(() => {
-      res.send({ message: "Successfully Registered, Please login now." });
-    });
-  }
-});
 app.post("/vendoradd", async (req, res) => {
   const { name, price, _id } = req.body;
   try {
@@ -303,30 +263,32 @@ app.post("/vendoradd", async (req, res) => {
     );
     const response = {
       data: updatedVendor.items,
-      alert: "Success",
+      alert: "Item Added",
     };
     res.json(response);
   } catch (err) {
     res.send({ message: "Failed to update vendor items" });
   }
 });
-
-app.post("/studentregister", async (req, res) => {
-  const { name, email, password } = req.body;
-  const student = await Student.findOne({ email: email });
-  console.log("student..", student);
-  //   Vendor.findOne({ email: email }).then((err, vendor) => {
-  if (student) {
-    res.send({ message: "User already registered" });
-  } else {
-    const student = new Student({
-      name,
-      email,
-      password,
-    });
-    student.save().then(() => {
-      res.send({ message: "Successfully Registered, Please login now." });
-    });
+app.post("/vendorremove", async (req, res) => {
+  const data = req.body;
+  const item = data[0];
+  const vendorId = data[1];
+  console.log(item.itemName, vendorId);
+  try {
+    const updatedVendor = await VendorItems.findByIdAndUpdate(
+      vendorId,
+      { $pull: { items: { itemName: item.itemName } } },
+      { new: true }
+    );
+    console.log(updatedVendor);
+    const response = {
+      data: updatedVendor.items,
+      alert: "Item Removed",
+    };
+    res.json(response);
+  } catch (err) {
+    res.send({ message: "Failed to update vendor items" });
   }
 });
 
@@ -357,18 +319,42 @@ app.post("/placeOrder", (req, res) => {
   });
   console.log(trans);
   newTransaction.save().then(() => {
-    res.send({ message: "Successfully Placed" });
+    res.send({ message: "Finish the transaction by scanning the QR" });
   });
 });
-app.post("/studentTransactions", async (req, res) => {
+app.post("/studentTransactionsPending", async (req, res) => {
   const student = req.body;
-  const data = await TransactionList.find({ studentId: student._id });
+  const data = await TransactionList.find({
+    studentId: student._id,
+    status: false,
+  });
   res.send(data);
   console.log("transactions: ", data);
 });
-app.post("/vendorTransactions", async (req, res) => {
+app.post("/studentTransactionsCompleted", async (req, res) => {
+  const student = req.body;
+  const data = await TransactionList.find({
+    studentId: student._id,
+    status: true,
+  });
+  res.send(data);
+  console.log("transactions: ", data);
+});
+app.post("/vendorTransactionsPending", async (req, res) => {
   const vendor = req.body;
-  const data = await TransactionList.find({ vendorId: vendor._id });
+  const data = await TransactionList.find({
+    vendorId: vendor._id,
+    status: false,
+  });
+  res.send(data);
+  console.log("transactions: ", data);
+});
+app.post("/vendorTransactionsCompleted", async (req, res) => {
+  const vendor = req.body;
+  const data = await TransactionList.find({
+    vendorId: vendor._id,
+    status: true,
+  });
   res.send(data);
   console.log("transactions: ", data);
 });
@@ -395,6 +381,7 @@ app.post("/checkTransaction", async (req, res) => {
       );
     }
   }
+  res.send({ message: "Order Completed!" });
 });
 
 app.listen(9000, () => {

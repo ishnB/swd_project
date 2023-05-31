@@ -2,11 +2,15 @@ import { React, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import QrScanner from "qr-scanner";
+import { XMarkIcon, QrCodeIcon } from "@heroicons/react/24/solid";
 
 function StudentTransactions() {
   const [loggedIn, setLoggedin] = useState(false);
   const [student, setStudent] = useState({});
-  const [transactionList, setTransactionList] = useState([]);
+  const [transactionListPending, setTransactionListPending] = useState([]);
+  const [transactionListCompleted, setTransactionListCompleted] = useState([]);
+  const [showIsPending, setShowPending] = useState(false);
+  const [showIsCompleted, setShowCompleted] = useState(false);
   const [result, setResult] = useState("");
   const history = useNavigate();
   useEffect(() => {
@@ -29,11 +33,20 @@ function StudentTransactions() {
       });
   }, []);
 
-  const handleClick = () => {
+  const showPending = () => {
     axios
-      .post("http://localhost:9000/studentTransactions", student)
+      .post("http://localhost:9000/studentTransactionsPending", student)
       .then((res) => {
-        setTransactionList(res.data);
+        setTransactionListPending(res.data);
+        setShowPending(true);
+      });
+  };
+  const showCompleted = () => {
+    axios
+      .post("http://localhost:9000/studentTransactionsCompleted", student)
+      .then((res) => {
+        setTransactionListCompleted(res.data);
+        setShowCompleted(true);
       });
   };
   const scanQr = (e, transaction) => {
@@ -53,33 +66,123 @@ function StudentTransactions() {
             student,
           ])
           .then((res) => {
-            // setTransactionList(res.data);
+            alert(res.data.message);
+            showPending();
+            showCompleted();
           });
       })
       .catch((e) => console.log(e));
   };
+  const logout = () => {
+    axios
+      .post("http://localhost:9000/studentlogout", student, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        alert(res.data);
+        history("/studentlogin");
+      });
+  };
   return (
-    <>
-      <h1>TRANSACTIONS</h1>
-      <button onClick={handleClick}>SHOW TRANSACTIONS</button>
-      <ul>
-        {transactionList.map((transaction) => (
-          <ul>
-            <li>
-              {transaction.items[0].map((trans) => (
+    <div className="student-transactions">
+      <button
+        className="absolute top-5 right-5 z-10 border-2 border-yellow-500 bg-white shadow-lg p-2 mb-4 rounded-lg font-extrabold text-purple hover:bg-purple hover:text-white transition-colors"
+        onClick={logout}
+      >
+        LOGOUT
+      </button>
+      <button
+        className=" absolute top-5 left-5 z-10 border-2 border-yellow-500 bg-white shadow-lg p-2 mb-4 rounded-lg font-extrabold text-purple hover:bg-purple hover:text-white transition-colors"
+        onClick={() => {
+          history("/student");
+        }}
+      >
+        HOME
+      </button>
+      <h1 className="mb-4 text-4xl font-extrabold drop-shadow-2xl leading-none tracking-tight font-pop text-purple-900 md:text-4xl lg:text-6xl dark:text-purple my-6">
+        TRANSACTIONS
+      </h1>
+      <div className="flex flex-col relative mt-12">
+        <button
+          onClick={showPending}
+          className="text-4xl mt-8 text-red-500 font-bold"
+        >
+          SHOW PENDING TRANSACTIONS
+        </button>
+        {showIsPending && (
+          <ul className="w-1/2 mx-auto my-12 grid grid-cols-2 gap-4 relative py-8">
+            <XMarkIcon
+              onClick={() => {
+                setShowPending(false);
+              }}
+              className="h-6 w-6 text-purple-500 absolute top-0 right-0 cursor-pointer"
+            />
+            {transactionListPending.map((transaction) => (
+              <ul className="bg-white rounded-lg shadow-lg px-8 py-6 relative flex flex-col justify-center">
                 <li>
-                  {trans[1]} AND {trans[2]}
+                  {transaction.items[0].map((trans) => (
+                    <li className="border-2 m-2 p-2 rounded-md">
+                      <ul>
+                        <li className="uppercase text-lg font-bold">
+                          {trans[1]}
+                        </li>
+                        <li className="text-yellow-500 font-bold">
+                          ₹ {trans[2]}
+                        </li>
+                      </ul>
+                    </li>
+                  ))}{" "}
+                  <li className="font-bold mt-4 border-2 p-2">
+                    TOTAL: ₹{transaction.total}
+                  </li>
+                  <input
+                    type="file"
+                    onChange={(e) => scanQr(e, transaction)}
+                    className="mx-auto my-4 "
+                  ></input>
                 </li>
-              ))}{" "}
-              <input
-                type="file"
-                onChange={(e) => scanQr(e, transaction)}
-              ></input>
-            </li>
+              </ul>
+            ))}
           </ul>
-        ))}
-      </ul>
-    </>
+        )}
+        <button
+          onClick={showCompleted}
+          className="text-4xl mt-8 mb-8 text-green-500 font-bold"
+        >
+          SHOW COMPLETED TRANSACTIONS
+        </button>
+        {showIsCompleted && (
+          <ul className="w-1/2 mx-auto my-12 grid grid-cols-2 gap-4 relative py-8">
+            <XMarkIcon
+              onClick={() => {
+                setShowCompleted(false);
+              }}
+              className="h-6 w-6 text-purple-500 absolute top-0 right-0 cursor-pointer"
+            />
+            {transactionListCompleted.map((transaction) => (
+              <ul className=" bg-white rounded-lg shadow-lg px-8 py-6 flex flex-col justify-center">
+                <li>
+                  {transaction.items[0].map((trans) => (
+                    <li className="border-2 m-2 p-2">
+                      <ul className="">
+                        <li className="uppercase text-lg">{trans[1]}</li>
+                        <li className="text-yellow-500 font-bold">
+                          ₹ {trans[2]}
+                        </li>
+                      </ul>
+                    </li>
+                  ))}{" "}
+                </li>
+                <li className="font-bold mt-4 border-2 p-2">
+                  TOTAL: ₹{transaction.total}
+                </li>
+              </ul>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
   );
 }
 
