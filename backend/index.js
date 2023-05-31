@@ -291,6 +291,11 @@ app.post("/vendorremove", async (req, res) => {
     res.send({ message: "Failed to update vendor items" });
   }
 });
+app.post("/removeTransaction", async (req, res) => {
+  const transaction = req.body;
+  await TransactionList.deleteOne({ _id: transaction._id });
+  res.send({ message: "Transaction removed" });
+});
 
 app.get("/vendorsList", async (req, res) => {
   const data = await VendorItems.find({});

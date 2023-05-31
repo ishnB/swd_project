@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { XMarkIcon, QrCodeIcon } from "@heroicons/react/24/solid";
+import { XMarkIcon, QrCodeIcon, TrashIcon } from "@heroicons/react/24/solid";
 import QRCode from "react-qr-code";
 
 function VendorTransactions() {
@@ -66,6 +66,14 @@ function VendorTransactions() {
         history("/vendorlogin");
       });
   };
+  const removeTransaction = (transaction) => {
+    axios
+      .post("http://localhost:9000/removeTransaction", transaction)
+      .then((res) => {
+        alert(res.data.message);
+        showPending();
+      });
+  };
 
   return (
     <div className="transactions-page relative">
@@ -109,6 +117,12 @@ function VendorTransactions() {
                       showQR(transaction);
                     }}
                     className="h-8 w-8 text-purple-500 absolute top-2 left-2 cursor-pointer"
+                  />
+                  <TrashIcon
+                    onClick={() => {
+                      removeTransaction(transaction);
+                    }}
+                    className="h-8 w-8 text-purple-500 absolute top-2 right-2 cursor-pointer"
                   />
                   {transaction.items[0].map((trans) => (
                     <li className="border-2 m-2 p-2 rounded-md">
