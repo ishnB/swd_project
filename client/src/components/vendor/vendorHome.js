@@ -166,23 +166,28 @@ function VendorHome({ setLoginUser }) {
               </div>
             )}
           </div>
-          <ul className="bg-white grid grid-cols-3 gap-4 justify-center py-4 px-4 rounded shadow-lg max-w-3xl mx-auto mb-12">
-            {itemList.map((item) => (
-              <li className="border-2 border-purple py-2 px-2 flex flex-col justify-evenly">
-                <ul className="flex flex-col ">
-                  <li className="uppercase text-lg ">{item.itemName}</li>
-                  <li className="text-yellow-500 font-bold">₹ {item.price}</li>
-                  <li
-                    onClick={() => {
-                      removeItem(item);
-                    }}
-                  >
-                    <TrashIcon className="h-6 w-6 text-purple-500 mx-auto mt-2 cursor-pointer hover:text-red-500 transition-colors" />
-                  </li>
-                </ul>
-              </li>
-            ))}
-          </ul>
+          <div className="bg-white rounded shadow-lg max-w-3xl mx-auto mb-12  py-4 px-4 ">
+            <h1 className="text-2xl text-purple font-bold mb-6">ITEMS</h1>
+            <ul className="bg-white grid grid-cols-3 gap-4 justify-center">
+              {itemList.map((item) => (
+                <li className="border-2 border-purple py-2 px-2 flex flex-col justify-evenly">
+                  <ul className="flex flex-col ">
+                    <li className="uppercase text-lg ">{item.itemName}</li>
+                    <li className="text-yellow-500 font-bold">
+                      ₹ {item.price}
+                    </li>
+                    <li
+                      onClick={() => {
+                        removeItem(item);
+                      }}
+                    >
+                      <TrashIcon className="h-6 w-6 text-purple-500 mx-auto mt-2 cursor-pointer hover:text-red-500 transition-colors" />
+                    </li>
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       )}
     </>

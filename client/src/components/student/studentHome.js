@@ -195,7 +195,7 @@ function StudentHome({ setLoginUser }) {
             </div>
           )}
 
-          {transaction.length != 0 && (
+          {transaction.length !== 0 && (
             <div className="cart fixed max-h-screen overflow-y-scroll mb-10 top-24 right-20 bg-white p-6 bottom-10 rounded-lg shadow-lg mr-10">
               <h1 className="text-2xl text-purple font-bold">CART</h1>
               <button
