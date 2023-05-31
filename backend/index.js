@@ -368,7 +368,6 @@ app.post("/checkTransaction", async (req, res) => {
   const result = data[0];
   const transaction = data[1];
   const student = data[2];
-  console.log("DATA :", result);
   const trans = await TransactionList.findOne({ _id: result });
   if (trans) {
     if (student._id === trans.studentId) {
@@ -384,9 +383,11 @@ app.post("/checkTransaction", async (req, res) => {
         },
         { new: true }
       );
+      res.send({ message: "Order Completed!" });
     }
+  } else {
+    res.send({ message: "Error completing transaction" });
   }
-  res.send({ message: "Order Completed!" });
 });
 
 app.listen(9000, () => {

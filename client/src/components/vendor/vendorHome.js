@@ -57,7 +57,7 @@ function VendorHome({ setLoginUser }) {
           setItem({ name: "", price: "" });
         });
     } else {
-      alert("invlid input");
+      alert("Invalid Input");
     }
   };
   const removeItem = (item) => {
